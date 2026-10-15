@@ -1,5 +1,5 @@
 Reference test run for the generated CampusFlow Next package
-Command: python -m unittest discover -s tests -v
+Command: python3 -m unittest discover -s tests -v
 Environment: Python standard library only; run from the project root.
 This is evidence for this generated package, not a claim that the user's existing repository or an integrated GitHub merge has already been tested.
 

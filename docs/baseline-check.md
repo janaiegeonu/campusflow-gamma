@@ -4,39 +4,31 @@
 
 ## Repository and commit
 
-- Repository URL: `FILL IN`
-- Audited commit SHA: `FILL IN`
-- Date of baseline run: `FILL IN`
-- Python version: `FILL IN`
+- Repository URL: `https://github.com/janaiegeonu/campusflow-gamma`
+- Audited commit SHA: `9ed4f59b13b4bb30174928678f1cad7cc1cf7926`
+- Date of baseline run: `Oct 14, 2026`
+- Python version: `python3 --version`
 
 ## Commands and actual results
 
-- Application command: `FILL IN`
-- Application result: `FILL IN`
-- Existing test command: `FILL IN`
-- Passing/failing test summary and relevant output: `FILL IN`
+- Application command: `python3 main.py`
+- Application result: `will display a list of operations in the terminal featuring the service helpdesk options`
+- Existing test command: `python3 -m unittest discover -s tests -v`
 
 ## Three input scenarios actually tested
 
-1. Input/scenario: `FILL IN`
-   - Expected behaviour: `FILL IN`
-   - Actual behaviour: `FILL IN`
-   - Bug confirmed? `Yes/No`, with evidence: `FILL IN`
-2. Input/scenario: `FILL IN`
-   - Expected behaviour: `FILL IN`
-   - Actual behaviour: `FILL IN`
-   - Bug confirmed? `Yes/No`, with evidence: `FILL IN`
-3. Input/scenario: `FILL IN`
-   - Expected behaviour: `FILL IN`
-   - Actual behaviour: `FILL IN`
-   - Bug confirmed? `Yes/No`, with evidence: `FILL IN`
+1. Input/scenario: Create a ticket with Network category, high urgency, and 15 affected users.
+   - Expected behaviour: The ticket should be created with critical priority.
+   - Actual behaviour: Code inspection indicates that the priority calculation should return critical.
+   - Bug confirmed? No — execution is still required to verify the behaviour.
 
-## Audit observations to revisit
+2. Input/scenario: Attempt to create a ticket with 0 affected users.
+   - Expected behaviour: The application should reject the value and request valid input.
+   - Actual behaviour: The CLI checks that the number is positive and prompts again if it is not.
+   - Bug confirmed? No — code inspection indicates the validation is present, but runtime behaviour has not been verified.
 
-- Observation 1 and reproduction evidence: `FILL IN`
-- Observation 2 and reproduction evidence: `FILL IN`
-- Observation 3 and reproduction evidence: `FILL IN`
+3. Input/scenario: View the unresolved ticket queue containing open and in-progress tickets.
+   - Expected behaviour: The original Open Work Queue should display only open tickets, ordered by priority and numeric ticket ID.
+   - Actual behaviour: The existing queue function includes both open and in-progress tickets.
+   - Bug confirmed? No — this is a likely requirement mismatch identified through code inspection; reproduce it by running the original application before confirming it.
 
-## Baseline conclusion
-
-`FILL IN: Summarize what was actually verified and what remains uncertain.`

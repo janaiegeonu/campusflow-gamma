@@ -18,4 +18,4 @@
 | Quiz retries invalid choice and scores | `tests/test_understanding_check.py` | Invalid answer retries; six actual correct answers score 6 |
 | CLI rejects invalid menu choice | `tests/test_cli.py` | Helpful error, then clean exit |
 
-The complete suite should be run with `python -m unittest discover -s tests -v` from the project root.
+The complete suite should be run with `python3 -m unittest discover -s tests -v` from the project root.

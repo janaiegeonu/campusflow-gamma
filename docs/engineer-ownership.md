@@ -49,5 +49,5 @@ Use real issue IDs from the shared repository. A possible naming scheme is `feat
 Each engineer should author a substantial PR, write at least five meaningful tests, inspect the partner's diff, leave at least two concrete review observations or questions, run relevant tests, address blocking feedback, and record approval before merge. After merging either PR, synchronize branches and run:
 
 ```bash
-python -m unittest discover -s tests -v
+python3 -m unittest discover -s tests -v
 ```
