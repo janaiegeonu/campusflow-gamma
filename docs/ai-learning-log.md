@@ -109,6 +109,161 @@ and check that the number is greater than zero.`
 - Can I explain it without AI? Example explanation:
   JSON decoding checks whether the file can be read as JSON, but it does not guarantee that the records satisfy CampusFlow's rules. I validate the complete collection before accepting it. If any record is invalid, the load fails before the new collection replaces the existing valid data.
 
+
+## Engineer B — learning cycle 1
+
+
+- Date / topic: 15 October 2026 — Case-insensitive search and combined filtering.
+Initial concept gap:
+  I wanted to understand how to implement case-insensitive title searching in Python and how to combine multiple optional filters without returning tickets that satisfy only some of the supplied conditions. I also wanted to ensure that searching would not modify the original ticket collection.
+
+
+- Exact question asked AI:
+  "Explain the difference between lower() and casefold() for case-insensitive string comparison in Python. Then use an unrelated collection of sample records to demonstrate how to combine several filters using logical AND. Show a small experiment that proves only records matching every supplied filter are returned, and explain how to verify that the original collection remains unchanged. Do not implement my CampusFlow search module."
+
+
+- Summary of guidance received:
+  AI explained that casefold() supports case-insensitive string comparisons, including certain Unicode characters that lower() does not handle identically. It also explained that combined search filters must use logical AND when every supplied condition is required. A separate result list should be created so that searching does not modify the original records.
+
+
+- Tiny unrelated experiment and code/output:
+  I used sample support tasks to demonstrate case-insensitive substring matching and combined filters.
+
+
+ python
+  tasks = [
+      {
+          "id": "T001",
+          "title": "Campus WiFi failure",
+          "category": "Network",
+          "status": "open",
+      },
+      {
+          "id": "T002",
+          "title": "WiFi login issue",
+          "category": "Network",
+          "status": "resolved",
+      },
+      {
+          "id": "T003",
+          "title": "Laptop WiFi application",
+          "category": "Hardware",
+          "status": "open",
+      },
+  ]
+
+
+  query = "WIFI"
+
+
+  matches = [
+      task for task in tasks
+      if query.casefold() in task["title"].casefold()
+      and task["category"] == "Network"
+      and task["status"] == "open"
+  ]
+
+
+  print([task["id"] for task in matches])
+ 
+
+
+  Expected output:
+
+
+ text
+  ['T001']
+ 
+
+
+- Independent verification (test, docs, observed output):
+  After running the experiment, I verified that only T001 matched. T002 was excluded because it was resolved, while T003 was excluded because its category was Hardware. This demonstrated that all supplied filters must match.
+
+
+- Final engineering decision and why:
+  I used case-insensitive substring matching for title searches and combined the optional category, status, and priority filters using AND logic. I kept search read-only by constructing a separate result list rather than modifying the original ticket collection.
+
+
+- Test added/updated to guard the learning:
+  Tests for case-insensitive title matching, combined filters using AND, and preserving the original ticket collection during search. Proposed test names include test_title_search_is_case_insensitive and test_combined_filters_use_and; I will confirm the actual names in my repository.
+
+
+- Can I explain it without AI? Example explanation:
+  Case-insensitive search allows a user to find a title without having to match its capitalization. When multiple filters are supplied, each one restricts the result. A ticket must satisfy every supplied condition to be included. Search should return matching records without changing the original ticket data.
+
+## Engineer B — learning cycle 2
+
+
+- Date / topic: 15 October 2026 — Safe percentage calculations and empty datasets.
+Initial concept gap:
+  I understood basic counting and arithmetic in Python, but I wanted to understand how to calculate a completion percentage safely when a collection contains no records. I also wanted to understand why reports must reflect the current state of each record instead of counting records based on their previous states.
+
+
+- Exact question asked AI:
+  "Explain how to calculate a completion percentage safely in Python when a collection may be empty. Use an unrelated task-tracking example to demonstrate the calculation, including the empty case. Then explain how counting records by their current status prevents double-counting when a completed task is reopened. Suggest tests that verify these behaviours without implementing my CampusFlow reports module."
+
+
+- Summary of guidance received:
+  AI explained that dividing by the total number of records causes a ZeroDivisionError when the total is zero. The calculation should explicitly return zero percent for an empty collection. It also explained that status reports should count each record according to its current status so that reopened tasks are no longer counted as completed.
+
+
+- Tiny unrelated experiment and code/output:
+  I used a small task-tracking example to demonstrate safe percentage calculation.
+
+
+ python
+  tasks = []
+
+
+  total_tasks = len(tasks)
+
+
+  completed_tasks = sum(
+      1 for task in tasks
+      if task["status"] == "completed"
+  )
+
+
+  if total_tasks == 0:
+      completion_percentage = 0
+  else:
+      completion_percentage = (
+          completed_tasks / total_tasks
+      ) * 100
+
+
+  print(f"Total tasks: {total_tasks}")
+  print(f"Completed tasks: {completed_tasks}")
+  print(f"Completion percentage: {completion_percentage:.1f}%")
+ 
+
+
+  Expected output:
+
+
+ text
+  Total tasks: 0
+  Completed tasks: 0
+  Completion percentage: 0.0%
+ 
+
+
+- Independent verification (test, docs, observed output):
+  After running the experiment, I verified that the empty collection produced a completion percentage of 0.0% without raising a ZeroDivisionError. I also verified that the calculation counts records by their current status rather than their previous status.
+
+
+- Final engineering decision and why:
+  I implemented report calculations that handle empty datasets explicitly and calculate resolution percentage from the current ticket collection. Reopened tickets count according to their current status, and unresolved tickets include both open and in-progress tickets. This keeps the report consistent with the application's workflow rules.
+
+
+- Test added/updated to guard the learning:
+  Tests for empty reports returning zero percent, correct resolution percentage calculations, and report counts after tickets are resolved and reopened. Proposed test names include test_empty_report_returns_zero_percent and test_reopened_ticket_counted_by_current_status; I will confirm the actual names in my repository.
+
+
+- Can I explain it without AI? Example explanation:
+  A percentage calculation must handle an empty collection because dividing by zero raises an exception. I explicitly return zero percent when there are no records. For non-empty collections, I calculate the percentage using the number of records currently in the completed state divided by the total number of records. Reopened records are counted according to their current status.
+
+
 ## Team example where evidence changed or rejected an AI suggestion
 
 - Exact suggestion and question context: `Used isinstance(value, int) to validate affected_users.`
